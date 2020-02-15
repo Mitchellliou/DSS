@@ -3,18 +3,31 @@
 import serial
 import re
 
-int value_count = 0
+value_count = 0
 
 def filter(distance, value_count): 
-    int last_value = 0
-    if value_count == 0:
+    last_value = 0
+    
+    # If first reading
+    if last_value == 0:
         last_value = distance
         value_count = value_count + 1
-    else if (last_value == distance)
+        
+    # If not first reading, and last value and current value are the same
+    elif (last_value == distance):
+        # If final reading, return
         if value_count == 5:
             print("Consistent reading: " + distance)
-            return distance
+            value_count = 0
+            return 
+        # Otherwise, just increment counter
         value_count = value_count + 1
+        print(value_count)
+    
+    # If not equal, then reset counter and set last value to current value
+    else: 
+        value_count = 0
+        last_value = distance
 
     
 
@@ -28,7 +41,8 @@ while 1:
         distance = re.search(r'\d+', line_decode)
         # print(type(distance))
         if(distance != None):
-            int i = 0
+            filter(distance.group(), value_count)
             print(distance.group())
+            print(value_count)
         # print(distance)
         
