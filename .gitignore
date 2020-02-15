@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Firebase Private Key
+Python/the-dss-firebase-adminsdk-6elb4-75631c0344.json
