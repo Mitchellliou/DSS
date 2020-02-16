@@ -4,10 +4,10 @@ import Graph from './Graph'
 
 function App() {
   return (
-    <div className="App">
-      <Graph param="Distance"/>
-      <Graph param="Teststring"/>
-    </div>
+      <div className="App">
+        <Graph param="Distance" title="Ramen"/>
+        <Graph param="Weight" title="Sprite"/>
+      </div>
   );
 }
 

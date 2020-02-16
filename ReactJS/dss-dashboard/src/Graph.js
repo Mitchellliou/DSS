@@ -1,14 +1,13 @@
 import { color } from 'd3-color';
-import { interpolateRgb } from 'd3-interpolate';
 import React, { Component } from 'react';
 
 import LiquidFillGauge from 'react-liquid-gauge';
 import firebase from './firebase'
 
-class Graph extends Component {
-    startColor = '#ff0000'; // red 
-    endColor = '#7CFC00'; // lawn green
+var weightMax = 16;
+var distanceMax = 50;
 
+class Graph extends Component {
     constructor(props) {
         super(props);
 
@@ -20,19 +19,37 @@ class Graph extends Component {
     componentDidMount() {
         const db = firebase.firestore();
 
-        db.collection("sampleData").doc("sampleDoc").onSnapshot((doc) => {
+        db.collection("User").doc("KitchenShelf").onSnapshot((doc) => {
             var data = doc.data()[this.props.param];
-            console.log(data);
+            if (this.props.param === "Distance") {
+                data = (distanceMax - data) / distanceMax * 100;
+                if (data < 0) {
+                    data = 0;
+                }
+            } else {
+                data = data / weightMax * 100;
+            }
+
             this.setState({
                 value: data
             });
         });
     };
 
+    calcFillColor(value) {
+        if (value < 33 || value == null) {
+            return '#ff0000';
+        } else if (value > 66) {
+            return '#7CFC00';
+        } else {
+            return '#ffff00'
+        }
+
+    }
+
     render() {
         const radius = 200;
-        const interpolate = interpolateRgb(this.startColor, this.endColor);
-        const fillColor = interpolate(this.state.value / 100);
+        const fillColor = this.calcFillColor(this.state.value);
         const gradientStops = [
             {
                 key: '0%',
@@ -57,7 +74,7 @@ class Graph extends Component {
         return (
             <div>
                 <LiquidFillGauge
-                    style={{ margin: '0 auto' }}
+                    style={{ margin: '50px' }}
                     width={radius * 2}
                     height={radius * 2}
                     value={this.state.value}
@@ -112,6 +129,12 @@ class Graph extends Component {
                 >
 
                 </div>
+                <h1>{this.props.title}</h1>
+                {this.props.param === "Weight" &&
+                    <button onClick={()=>{weightMax = this.state.value;console.log(weightMax);this.setState({value:100})}}>
+                        Tare
+                    </button>
+                }
             </div>
         );
     }
