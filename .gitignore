@@ -130,3 +130,5 @@ dmypy.json
 
 # Firebase Private Key
 Python/ServiceAccountKey.json
+ReactJS/dss-dashboard/src/firebase.js
+
